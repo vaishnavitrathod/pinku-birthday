@@ -1,198 +1,543 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>A Note for you 🎂</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Note for you 🎂</title>
+    <style>
+        :root {
+            --color-primary: #ff4081;
+            --color-secondary: #f8bbd0;
+            --color-background: #fcf8f9;
+            --color-text: #4a4a4a;
+        }
 
-<style>
-:root {
---color-primary:#ff4081;
---color-secondary:#f8bbd0;
---color-background:#fcf8f9;
---color-text:#4a4a4a;
-}
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: var(--color-background);
+            background-image: 
+                linear-gradient(to right, rgba(255, 192, 203, 0.3) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 192, 203, 0.3) 1px, transparent 1px);
+            background-size: 20px 20px;
+            color: var(--color-text);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
 
-body{
-font-family:Arial,sans-serif;
-background-color:var(--color-background);
-background-image:
-linear-gradient(to right,rgba(255,192,203,.3)1px,transparent 1px),
-linear-gradient(to bottom,rgba(255,192,203,.3)1px,transparent 1px);
-background-size:20px 20px;
-color:var(--color-text);
-margin:0;
-padding:20px;
-overflow-x:hidden;
-overflow-y:auto;
-}
+        .screen {
+            width: 100%;
+            max-width: 400px;
+            background-color: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            padding: 30px;
+            text-align: center;
+            display: none;
+            box-sizing: border-box;
+            position: relative;
+            margin: 20px auto;
+        }
 
-.screen{
-width:100%;
-max-width:400px;
-background:#fff;
-border-radius:20px;
-box-shadow:0 10px 40px rgba(0,0,0,.15);
-padding:30px;
-text-align:center;
-display:none;
-box-sizing:border-box;
-margin:20px auto;
-}
+        .screen.active {
+            display: block;
+            animation: slideIn 0.4s ease-out;
+        }
 
-.screen.active{display:block;}
+        /* ✅ fixed animation so it doesn't push the card off-screen */
+        @keyframes slideIn {
+            from { 
+                opacity: 0; 
+                transform: translateY(20px) scale(0.96); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0) scale(1); 
+            }
+        }
 
-h2{color:var(--color-primary);font-size:1.8em;margin:10px 0 20px;font-weight:bold;}
-#screen-1 h2{font-size:2.5em;color:#e91e63;}
+        h2 {
+            color: var(--color-primary); 
+            font-size: 1.8em;
+            margin-top: 5px;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
 
-.heart-icon{font-size:1.5em;color:var(--color-primary);}
+        #screen-1 h2 {
+            font-size: 2.5em;
+            color: #e91e63;
+        }
 
-.primary-button{
-background:var(--color-primary);
-color:white;
-border:none;
-padding:12px 25px;
-border-radius:30px;
-font-size:1.05em;
-cursor:pointer;
-box-shadow:0 4px 10px rgba(255,64,129,.6);
-margin-top:15px;
-font-weight:bold;
-}
+        .heart-icon {
+            font-size: 1.5em;
+            color: var(--color-primary);
+            margin-right: 5px;
+        }
 
-.primary-button:hover{background:#e91e63;}
-.primary-button:active{transform:scale(.97);}
+        .primary-button {
+            background-color: var(--color-primary); 
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 30px;
+            font-size: 1.1em;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(255, 64, 129, 0.6);
+            transition: background-color 0.3s, transform 0.1s;
+            margin-top: 15px;
+            font-weight: bold;
+        }
 
-/* ---------------- SCREEN 4 FIX ---------------- */
+        .primary-button:hover {
+            background-color: #e91e63;
+        }
+        
+        .primary-button:active {
+            transform: scale(0.98);
+        }
 
-#screen-4{padding-bottom:110px;}
+        /* Screen 2 – Envelope */
+        .envelope-container {
+            margin: 40px auto;
+            position: relative;
+            width: 150px;
+            height: 100px;
+            background: var(--color-secondary);
+            border-radius: 5px;
+            overflow: visible;
+            cursor: pointer;
+            transition: transform 0.5s;
+        }
 
-.special-card-wrapper{margin:15px 0;}
+        .envelope-container:before {
+            content: '💌';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 2em;
+            z-index: 2;
+        }
+        
+        #screen-2 .letter-content {
+            border: 1px dashed var(--color-secondary);
+            padding: 20px 15px;
+            margin-top: 30px;
+            background-color: #fffafb;
+            text-align: left;
+            border-radius: 10px;
+            max-height: 230px;
+            overflow-y: auto;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
 
-.special-card{
-width:100%;
-border-radius:12px;
-overflow:hidden;
-cursor:pointer;
-box-shadow:0 2px 6px rgba(0,0,0,.12);
-}
+        /* Playlist (Screen 3) */
+        .card-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 20px;
+        }
 
-.card-face{
-padding:10px;
-display:flex;
-align-items:center;
-justify-content:center;
-background:#fffff0;
-border:2px solid #ffc0cb;
-border-radius:12px;
-}
+        .track-card {
+            border: 2px solid var(--color-secondary);
+            border-radius: 15px;
+            padding: 15px;
+            margin: 5px 0;
+            background-color: #fff0f5;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .track-image {
+            width: 80px;
+            height: 80px;
+            border-radius: 12px;
+            object-fit: cover;
+            margin-right: 12px;
+        }
+        
+        .track-details {
+            flex-grow: 1;
+            text-align: left;
+        }
 
-.card-face.back{
-display:none;
-background:#fff0f5;
-color:#880e4f;
-font-size:.9em;
-padding:15px;
-text-align:center;
-}
+        .song-button {
+            background-color: var(--color-primary);
+            color: white;
+            border: none;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            cursor: pointer;
+            white-space: nowrap;
+        }
 
-.special-card.flipped .front{display:none;}
-.special-card.flipped .back{display:flex;}
+        .song-button:hover {
+            background-color: #e91e63;
+        }
 
-#all-messages-unlocked{
-margin-top:30px;
-padding-bottom:30px;
-}
+        /* Screen 4 – Flip cards + bigger images */
+        .special-card-wrapper {
+            perspective: 1000px;
+            height: 190px;
+        }
 
-/* --------------------------------------------- */
+        .special-card {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            border-radius: 10px;
+        }
 
-.card-list{display:flex;flex-direction:column;gap:12px;margin-top:20px;}
-</style>
+        .special-card.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+            box-sizing: border-box;
+            border-radius: 10px;
+        }
+
+        .card-face.front {
+            background-color: #fffff0;
+            border: 2px solid #ffc0cb;
+            font-weight: bold;
+            color: #e91e63;
+        }
+
+        .card-face.back {
+            transform: rotateY(180deg);
+            background-color: #fff0f5; 
+            color: #880e4f;
+            font-size: 0.9em;
+            text-align: center;
+            border: 2px solid #ffc0cb;
+            padding: 15px;
+        }
+        
+        .card-face img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        /* 🔽 Extra bottom space for button on Screen 4 */
+        #screen-4 {
+            padding-bottom: 110px;   /* space for the bottom button */
+        }
+
+        /* Screen 5 */
+        #screen-5 .final-message {
+            border: 3px double var(--color-primary);
+            padding: 25px;
+            margin-top: 30px;
+            background-color: #fff5f8;
+            border-radius: 15px;
+            text-align: left;
+        }
+        
+        #screen-5 .seal-status {
+            margin-top: 20px;
+            font-size: 1.1em;
+            color: #e91e63;
+        }
+
+    </style>
 </head>
-
 <body>
 
-<!-- SCREEN 4 ONLY SHOWN HERE FOR BREVITY (LOGIC UNCHANGED FROM YOUR FILE) -->
+    <!-- SCREEN 1 -->
+    <div id="screen-1" class="screen active">
+        <p style="color: var(--color-primary); font-weight: bold;">
+            A Note for You <span class="heart-icon"></span>
+        </p>
+        <h2>Hey Sis! <span class="heart-icon">💖</span></h2>
+        <p>I wanted to do something different for you, other than the greeting cards that I give every year,</p>
+        <p>so I made something special just for you! ✨</p>
+        <p>Tap the below button and let me walk you through this webpage.</p>
+        <button class="primary-button"
+            onclick="nextScreen('screen-2')">
+            Start the surprise <span class="heart-icon">✨</span>
+        </button>
+    </div>
 
-<div id="screen-4" class="screen active">
-<h2>Flip these B'day Cards ✨</h2>
-<p>Click each card to reveal a special message!</p>
+    <!-- SCREEN 2 -->
+    <div id="screen-2" class="screen">
 
-<div class="card-list">
+        <p style="color: var(--color-primary); font-weight: bold;">A Love Letter 💌</p>
+        <h2>Happy Sweet 16🥰</h2>
 
-<div class="special-card-wrapper">
-<div class="special-card" id="card1" onclick="flipCard('card1')">
-<div class="card-face front">
-<video muted loop autoplay width="100%" style="border-radius:12px;">
-<source src="video/song2.mp4" type="video/mp4">
-</video>
-</div>
-<div class="card-face back">Ruplibai or Rupunzel, keep smiling always 💫</div>
-</div>
-</div>
+        <div class="envelope-container">
+            <button class="primary-button"
+                style="padding: 5px 15px; margin: 0; position: absolute; top: 70%; left: 50%;
+                       transform: translateX(-50%); z-index: 3;"
+                onclick="showLetterContent()">
+                Special Delivery
+            </button>
+        </div>
+        
+        <div class="letter-content" id="letter-content">
+            <p style="font-weight: bold;">My dearest Pinku,</p>
+            <p style="margin-top: 10px;">
+                <img src="images/pinku.jpg" alt="Kitty Decoration"
+             style="position: absolute; top: 130px; right: 140px; height: 170px;">
+            </p>
+            <p style="margin-top: 15px; text-align: right; font-weight: bold; color: var(--color-primary);">
+            Happiest 16th birthday. May you be blessed with loads of happiness and good health. <span class="heart-icon">💕</span>
+            </p>
+            <button class="primary-button" style="width: 100%; display: none;" id="continue-2"
+                onclick="nextScreen('screen-3')">
+                Continue To See More <span class="heart-icon">✨</span>
+            </button>
+        </div>
+    </div>
 
-<div class="special-card-wrapper">
-<div class="special-card" id="card2" onclick="flipCard('card2')">
-<div class="card-face front">
-<video muted loop autoplay width="100%" style="border-radius:12px;">
-<source src="video/song1.mp4" type="video/mp4">
-</video>
-</div>
-<div class="card-face back">You are my favorite memories wrapped in love and chaos ☀</div>
-</div>
-</div>
+    <!-- SCREEN 3 – PLAYLIST WITH 3 AUDIOS -->
+    <div id="screen-3" class="screen">
+        <p style="color: var(--color-primary); font-weight: bold;">A Tiny Playlist For You</p>
+        <h2>I Hope You'll Like It 🎶</h2>
+        <p>Choose a track to start vibing ✨</p>
+        
+        <div class="card-list">
+            <!-- Track 1 -->
+            <div class="track-card">
+                <img src="card1.jpg" class="track-image">
+                <div class="track-details">
+                    <p style="margin: 0; font-weight: bold;">Pied-piper</p>
+                    <p style="font-size: 0.8em; margin: 3px 0 0;">Remember we used to sing this a lot?</p>
+                </div>
+                <audio id="track1" src="audio/song1.mp3"></audio>
+                <button class="song-button" onclick="toggleTrack('track1', this)">Play</button>
+            </div>
 
-<div class="special-card-wrapper">
-<div class="special-card" id="card3" onclick="flipCard('card3')">
-<div class="card-face front">
-<video muted loop autoplay width="100%" style="border-radius:12px;">
-<source src="video/song3.mp4" type="video/mp4">
-</video>
-</div>
-<div class="card-face back">Yes we don't talk everyday, but I'll always be there for you 💞</div>
-</div>
-</div>
+            <!-- Track 2 -->
+            <div class="track-card">
+                <img src="card2.jpg" alt="Song 2 Artwork" class="track-image">
+                <div class="track-details">
+                    <p style="margin: 0; font-weight: bold;">Ishq wala love</p>
+                    <p style="font-size: 0.8em; margin: 3px 0 0;">Even if the world ends, I'd still find you ❤</p>
+                </div>
+                <audio id="track2" src="audio/song0.mp3"></audio>
+                <button class="song-button" onclick="toggleTrack('track2', this)">Play</button>
+            </div>
 
-</div>
+            <!-- Track 3 -->
+            <div class="track-card">
+                <img src="card3.jpg" alt="Song 3 Artwork" class="track-image">
+                <div class="track-details">
+                    <p style="margin: 0; font-weight: bold;">Die for you</p>
+                    <p style="font-size: 0.8em; margin: 3px 0 0;">Maybe not the weekend but the weeknd!</p>
+                </div>
+                <audio id="track3" src="audio/song3.mp3"></audio>
+                <button class="song-button" onclick="toggleTrack('track3', this)">Play</button>
+            </div>
+        </div>
+        
+        <button class="primary-button" onclick="nextScreen('screen-4')">
+            Next Surprise <span class="heart-icon">➡</span>
+        </button>
+    </div>
 
-<div id="all-messages-unlocked" style="display:none;">
-<p style="font-weight:bold;color:var(--color-primary);">All Messages Unlocked 🔑</p>
-<button class="primary-button" onclick="stopVideo(); nextScreen('screen-5')">
-Open the Final Letter ✉
-</button>
-</div>
+    <!-- SCREEN 4 – VIDEO + SPECIAL CARDS -->
+    <div id="screen-4" class="screen">
+        <h2>Flip these B'day Cards ✨</h2>
+        <p>Click each card to reveal a special message!</p>
 
-</div>
+        <div class="card-list">
+            <div class="special-card-wrapper">
+                <div class="special-card" id="card1" onclick="flipCard('card1')">
+                    <div class="card-face front">
+                        <video
+                            autoplay
+                            muted
+                            loop
+                            width="100%"
+                            style="border-radius: 15px; margin-bottom: 20px;">
+                            <source src="video/song2.mp4" type="video/mp4">
+                        </video>   
+                    </div>
+                    <div class="card-face back">
+                        Ruplibai or Rupunzel, keep smiling always💫
+                    </div>
+                </div>
+            </div>
 
-<script>
+            <div class="special-card-wrapper">
+                <div class="special-card" id="card2" onclick="flipCard('card2')">
+                    <div class="card-face front">
+                        <video
+                            autoplay
+                            muted
+                            loop
+                            width="100%"
+                            style="border-radius: 15px; margin-bottom: 20px;">
+                            <source src="video/song1.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                    <div class="card-face back">
+                        You are my favorite memories wrapped in love and chaos. ☀
+                    </div>
+                </div>
+            </div>
 
-let flippedCount=0,totalCards=3;
+            <div class="special-card-wrapper">
+                <div class="special-card" id="card3" onclick="flipCard('card3')">
+                    <div class="card-face front">
+                        <video
+                            autoplay
+                            muted
+                            loop
+                            width="100%"
+                            style="border-radius: 15px; margin-bottom: 20px;">
+                            <source src="video/song3.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                    <div class="card-face back">
+                        Yes we don't talk everyday, but know that I'll always be there for you 💞
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="all-messages-unlocked"
+            style="display:none; margin-top:30px; padding-bottom:20px;">
 
-function flipCard(id){
-const c=document.getElementById(id);
-if(!c.classList.contains('flipped')){
-c.classList.add('flipped');
-flippedCount++;
-if(flippedCount===totalCards){
-document.getElementById('all-messages-unlocked').style.display='block';
-}
-}
-}
+            <p style="font-weight: bold; color: var(--color-primary);">
+                All Messages Unlocked! <span class="heart-icon">🔑</span>
+            </p>
+            <button class="primary-button" onclick="stopVideo(); nextScreen('screen-5')">
+                Open the Final Letter <span class="heart-icon">✉</span>
+            </button>
+        </div>
+    </div>
 
-function stopVideo(){
-document.querySelectorAll('video').forEach(v=>{
-v.pause();
-v.currentTime=0;
-});
-}
+    <!-- SCREEN 5 -->
+    <div id="screen-5" class="screen">
+        <h2>Final Letter <span class="heart-icon">💖</span></h2>
+        <div class="final-message">
+            <p style="font-weight: bold;">My sweetest sister💫</p>
+            <p style="margin-top: 10px; font-size: 0.95em;">
+                I hope this page made you smile, even for a second. I just wanted you to feel what I already know- that you are loved 💞 even in the time when you act insufferable.
+                Let's keep making memories and very small moment in between.🌟 I'm always here to support you, annoy the life out of you, help you do your projects, buy you the spicy snacks, which I know you will choose over me anytime😅
+                Happy Birthday, Pinku. And don't expect me to praise you, cuz that's not that siblings do.😂
+            </p>
+            <p style="margin-top: 15px; font-weight: bold; font-style: italic; color: #880e4f;">
+                Forever your sibling, in every universe.
+            </p>
+        </div>
+        
+        <button class="primary-button" onclick="sealLetter()">Seal this Letter</button>
+        <p class="seal-status" id="seal-status" style="display: none;">
+            Letter Sealed with Love. I Love You Always.<span class="heart-icon">💕</span>
+        </p>
+        <button class="primary-button" style="background-color: #880e4f; margin-left: 10px;" onclick="location.reload()">
+            Restart
+        </button>
+    </div>
 
-function nextScreen(id){
-document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-document.getElementById(id).classList.add('active');
-}
+    <script>
+        const screens = document.querySelectorAll('.screen');
+        let flippedCount = 0;
+        const totalCards = 3;
+        const trackIds = ['track1', 'track2', 'track3'];
 
-</script>
+        function nextScreen(nextId) {
+            screens.forEach(screen => {
+                screen.classList.remove('active');
+            });
+            document.getElementById(nextId).classList.add('active');
+        }
 
+        function showLetterContent() {
+            document.querySelector('.envelope-container').style.transform = 'scale(1.1)';
+            document.querySelector('.envelope-container').style.opacity = '0.5';
+            document.getElementById('letter-content').style.opacity = '1';
+            document.getElementById('continue-2').style.display = 'block';
+            document.querySelector('.envelope-container button').style.display = 'none';
+        }
+
+        function flipCard(cardId) {
+            const card = document.getElementById(cardId);
+            const wasFlipped = card.classList.contains('flipped');
+            card.classList.toggle('flipped');
+
+            if (!wasFlipped) {
+                flippedCount++;
+                if (flippedCount === totalCards) {
+                    document.getElementById('all-messages-unlocked').style.display = 'block';
+                }
+            }
+        }
+
+        function toggleTrack(id, btn) {
+            // pause all others
+            trackIds.forEach(tid => {
+                const audio = document.getElementById(tid);
+                if (!audio) return;
+                if (tid !== id) {
+                    audio.pause();
+                    audio.currentTime = 0;
+                    // reset other buttons text
+                    const otherBtn = document.querySelector(`button[onclick*="${tid}"]`);
+                    if (otherBtn) otherBtn.textContent = 'Play';
+                }
+            });
+
+            const current = document.getElementById(id);
+            if (current.paused) {
+                current.play();
+                btn.textContent = 'Pause';
+            } else {
+                current.pause();
+                btn.textContent = 'Play';
+            }
+        }
+
+        function stopVideo() {
+            // stop ALL videos instead of just one id
+            const vids = document.querySelectorAll('video');
+            vids.forEach(v => {
+                v.pause();
+                v.currentTime = 0;
+            });
+        }
+
+        function sealLetter() {
+            document.getElementById('seal-status').style.display = 'block';
+        }
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            screens.forEach((screen, index) => {
+                if (index === 0) {
+                    screen.classList.add('active');
+                } else {
+                    screen.classList.remove('active');
+                }
+            });
+            document.getElementById('letter-content').style.opacity = '0';
+        });
+    </script>
 </body>
 </html>
 
