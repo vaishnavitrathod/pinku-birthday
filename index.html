@@ -236,6 +236,12 @@
             height: 100%;
             object-fit: contain;
         }
+        /* 🔽 Reduce only Screen 4 height */
+#screen-4 {
+    min-height: 360px;   /* was 480px globally */
+    padding: 20px;      /* tighter padding */
+}
+
 
         /* Screen 5 */
         #screen-5 .final-message {
@@ -365,7 +371,7 @@
                autoplay
                muted
                loop
-               width="90%"
+               width="100%"
                style="border-radius: 15px; margin-bottom: 20px;">
             <source src="video/song2.mp4" type="video/mp4">
         </video>   
@@ -383,7 +389,7 @@
                autoplay
                muted
                loop
-               width="90%"
+               width="100%"
                style="border-radius: 15px; margin-bottom: 20px;">
             <source src="video/song1.mp4" type="video/mp4">
         </video>
@@ -401,7 +407,7 @@
                autoplay
                muted
                loop
-               width="90%"
+               width="100%"
                style="border-radius: 15px; margin-bottom: 20px;">
             <source src="video/song3.mp4" type="video/mp4">
         </video>
@@ -530,4 +536,5 @@
     </script>
 </body>
 </html>
+
 
