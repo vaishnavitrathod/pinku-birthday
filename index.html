@@ -268,7 +268,7 @@
 <body>
 
     <!-- SCREEN 1 -->
-    <div id="screen-1" class="screen active">
+    <div id="screen-1" class="screen">
         <p style="color: var(--color-primary); font-weight: bold;">
             A Note for You <span class="heart-icon"></span>
         </p>
@@ -457,89 +457,81 @@
     </div>
 
     <script>
-        const screens = document.querySelectorAll('.screen');
-        let flippedCount = 0;
-        const totalCards = 3;
-        const trackIds = ['track1', 'track2', 'track3'];
+const screens = document.querySelectorAll('.screen');
+let flippedCount = 0;
+const totalCards = 3;
+const trackIds = ['track1', 'track2', 'track3'];
 
-        function nextScreen(nextId) {
-            screens.forEach(screen => {
-                screen.classList.remove('active');
-            });
-            document.getElementById(nextId).classList.add('active');
+function nextScreen(nextId) {
+    screens.forEach(screen => {
+        screen.classList.remove('active');
+    });
+    document.getElementById(nextId).classList.add('active');
+}
+
+function showLetterContent() {
+    document.querySelector('.envelope-container').style.transform = 'scale(1.1)';
+    document.querySelector('.envelope-container').style.opacity = '0.5';
+    document.getElementById('letter-content').style.opacity = '1';
+    document.getElementById('continue-2').style.display = 'block';
+    document.querySelector('.envelope-container button').style.display = 'none';
+}
+
+function flipCard(cardId) {
+    const card = document.getElementById(cardId);
+    if (!card.classList.contains('flipped')) {
+        card.classList.add('flipped');
+        flippedCount++;
+        if (flippedCount === totalCards) {
+            document.getElementById('all-messages-unlocked').style.display = 'block';
         }
+    }
+}
 
-        function showLetterContent() {
-            document.querySelector('.envelope-container').style.transform = 'scale(1.1)';
-            document.querySelector('.envelope-container').style.opacity = '0.5';
-            document.getElementById('letter-content').style.opacity = '1';
-            document.getElementById('continue-2').style.display = 'block';
-            document.querySelector('.envelope-container button').style.display = 'none';
+function toggleTrack(id, btn) {
+    trackIds.forEach(tid => {
+        const audio = document.getElementById(tid);
+        if (!audio) return;
+        if (tid !== id) {
+            audio.pause();
+            audio.currentTime = 0;
+            const otherBtn = document.querySelector(`button[onclick*="${tid}"]`);
+            if (otherBtn) otherBtn.textContent = 'Play';
         }
+    });
 
-        function flipCard(cardId) {
-            const card = document.getElementById(cardId);
-            const wasFlipped = card.classList.contains('flipped');
-            card.classList.toggle('flipped');
+    const current = document.getElementById(id);
+    if (current.paused) {
+        current.play();
+        btn.textContent = 'Pause';
+    } else {
+        current.pause();
+        btn.textContent = 'Play';
+    }
+}
 
-            if (!wasFlipped) {
-                flippedCount++;
-                if (flippedCount === totalCards) {
-                    document.getElementById('all-messages-unlocked').style.display = 'block';
-                }
-            }
-        }
+function stopVideo() {
+    document.querySelectorAll('video').forEach(v => {
+        v.pause();
+        v.currentTime = 0;
+    });
+}
 
-        function toggleTrack(id, btn) {
-            // pause all others
-            trackIds.forEach(tid => {
-                const audio = document.getElementById(tid);
-                if (!audio) return;
-                if (tid !== id) {
-                    audio.pause();
-                    audio.currentTime = 0;
-                    // reset other buttons text
-                    const otherBtn = document.querySelector(`button[onclick*="${tid}"]`);
-                    if (otherBtn) otherBtn.textContent = 'Play';
-                }
-            });
+function sealLetter() {
+    document.getElementById('seal-status').style.display = 'block';
+}
 
-            const current = document.getElementById(id);
-            if (current.paused) {
-                current.play();
-                btn.textContent = 'Pause';
-            } else {
-                current.pause();
-                btn.textContent = 'Play';
-            }
-        }
+/* ✅ FORCE SCREEN 1 ON EVERY LOAD */
+window.addEventListener('load', () => {
+    screens.forEach(screen => screen.classList.remove('active'));
+    document.getElementById('screen-1').classList.add('active');
+    flippedCount = 0;
+});
+</script>
 
-        function stopVideo() {
-            // stop ALL videos instead of just one id
-            const vids = document.querySelectorAll('video');
-            vids.forEach(v => {
-                v.pause();
-                v.currentTime = 0;
-            });
-        }
-
-        function sealLetter() {
-            document.getElementById('seal-status').style.display = 'block';
-        }
-        
-        document.addEventListener('DOMContentLoaded', () => {
-            screens.forEach((screen, index) => {
-                if (index === 0) {
-                    screen.classList.add('active');
-                } else {
-                    screen.classList.remove('active');
-                }
-            });
-            document.getElementById('letter-content').style.opacity = '0';
-        });
-    </script>
 </body>
 </html>
+
 
 
 
